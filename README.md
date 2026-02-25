@@ -20,24 +20,33 @@ O **PMZ DayZ MCP** é um servidor MCP que atua como um **assistente inteligente 
 ## 🏗️ Arquitetura
 
 ```
-pmz-dayz-mcp/
-├── index.js                          # 🚀 Ponto de entrada — registra todas as ferramentas MCP
-├── package.json                      # Dependências e scripts
-├── .vscode/
-│   └── mcp.json                      # Configuração do servidor MCP para VS Code
-└── src/
-    ├── config.js                     # ⚙️ Configuração central (caminhos, extensões, cache)
-    ├── indexer/
-    │   ├── FileParser.js             # 🔧 Parser de arquivos .c (Enforce Script) e .layout (GUI)
-    │   └── ScriptIndexer.js          # 📇 Indexador — varre pastas, constrói índice e cache
-    ├── tools/
-    │   └── KnowledgeBase.js          # 📚 CRUD da base de conhecimento em Markdown
-    └── knowledge-base/
-        ├── recipes/                  # 🍳 Receitas de código (como fazer X no DayZ)
-        ├── anti_patterns/            # 🚫 Anti-patterns (erros comuns e como evitar)
-        ├── ui_patterns/              # 🖼️ Padrões de UI/Layout
-        └── migration_log/            # 🔄 Logs de migração entre versões
+PMZ_DayZ_MCP/
+├── 1.28/                             # 📁 Scripts DayZ versão 1.28 (já incluídos no repo)
+│   ├── Scripts/                      #     Arquivos .c (Enforce Script)
+│   └── GUI/                          #     Arquivos .layout e .xml
+├── 1.29/                             # 📁 Scripts DayZ versão 1.29 (já incluídos no repo)
+│   ├── Scripts/
+│   └── GUI/
+└── pmz-dayz-mcp/                     # 🚀 Servidor MCP
+    ├── index.js                      #     Ponto de entrada — registra todas as ferramentas MCP
+    ├── package.json                  #     Dependências e scripts
+    ├── .vscode/
+    │   └── mcp.json                  #     Configuração do servidor MCP para VS Code
+    └── src/
+        ├── config.js                 # ⚙️ Configuração central (caminhos, extensões, cache)
+        ├── indexer/
+        │   ├── FileParser.js         # 🔧 Parser de arquivos .c (Enforce Script) e .layout (GUI)
+        │   └── ScriptIndexer.js      # 📇 Indexador — varre pastas, constrói índice e cache
+        ├── tools/
+        │   └── KnowledgeBase.js      # 📚 CRUD da base de conhecimento em Markdown
+        └── knowledge-base/
+            ├── recipes/              # 🍳 Receitas de código (como fazer X no DayZ)
+            ├── anti_patterns/        # 🚫 Anti-patterns (erros comuns e como evitar)
+            ├── ui_patterns/          # 🖼️ Padrões de UI/Layout
+            └── migration_log/        # 🔄 Logs de migração entre versões
 ```
+
+> 📦 As pastas `1.28/` e `1.29/` já vêm incluídas no repositório com os scripts originais do DayZ, prontas para uso.
 
 ---
 
@@ -91,6 +100,8 @@ git clone https://github.com/kellyregis/PMZ_DayZ_MCP.git
 cd PMZ_DayZ_MCP/pmz-dayz-mcp
 ```
 
+> ✅ As pastas `1.28/` e `1.29/` com os scripts originais do DayZ já vêm incluídas no repositório. Não é necessário baixá-las separadamente.
+
 ### 2. Instalar dependências
 
 ```bash
@@ -99,29 +110,49 @@ npm install
 
 ### 3. Configurar os caminhos dos Scripts DayZ
 
-Edite o arquivo `src/config.js` ou use **variáveis de ambiente**:
+O servidor precisa saber onde estão as pastas `1.28/` e `1.29/`. Por padrão, ele aponta para o caminho original do projeto. Se você clonou em outro lugar, **ajuste os caminhos** de uma das formas abaixo:
+
+#### Opção A — Variáveis de ambiente (recomendado) ✅
 
 ```bash
-# Via variáveis de ambiente (recomendado)
-set DAYZ_128_PATH=D:\SeuCaminho\DayZ_1.28
-set DAYZ_129_PATH=D:\SeuCaminho\DayZ_1.29
+# Windows (cmd)
+set DAYZ_128_PATH=C:\MeuCaminho\PMZ_DayZ_MCP\1.28
+set DAYZ_129_PATH=C:\MeuCaminho\PMZ_DayZ_MCP\1.29
+
+# Windows (PowerShell)
+$env:DAYZ_128_PATH = "C:\MeuCaminho\PMZ_DayZ_MCP\1.28"
+$env:DAYZ_129_PATH = "C:\MeuCaminho\PMZ_DayZ_MCP\1.29"
+
+# Linux / macOS
+export DAYZ_128_PATH=/home/user/PMZ_DayZ_MCP/1.28
+export DAYZ_129_PATH=/home/user/PMZ_DayZ_MCP/1.29
 ```
 
-A estrutura esperada dentro de cada pasta de versão:
+#### Opção B — Editar `src/config.js` diretamente
+
+Abra o arquivo `pmz-dayz-mcp/src/config.js` e altere os caminhos:
+
+```js
+dayz128Path: process.env.DAYZ_128_PATH || 'C:\\MeuCaminho\\PMZ_DayZ_MCP\\1.28',
+dayz129Path: process.env.DAYZ_129_PATH || 'C:\\MeuCaminho\\PMZ_DayZ_MCP\\1.29',
 ```
-1.28/
-├── Scripts/          # Arquivos .c (Enforce Script)
+
+#### 📁 Estrutura esperada dentro de cada pasta de versão
+
+```
+1.28/  (ou 1.29/)
+├── Scripts/              # Arquivos .c (Enforce Script)
 │   ├── 1_Core/
 │   ├── 2_GameLib/
 │   ├── 3_Game/
 │   ├── 4_World/
 │   └── 5_Mission/
-└── GUI/              # Arquivos .layout e .xml
+└── GUI/                  # Arquivos .layout e .xml
 ```
 
 ### 4. Configurar no VS Code
 
-Copie ou edite o arquivo `.vscode/mcp.json` no seu workspace:
+Copie ou edite o arquivo `.vscode/mcp.json` no seu workspace. **Ajuste os caminhos** para onde você clonou o repositório:
 
 ```json
 {
@@ -129,17 +160,17 @@ Copie ou edite o arquivo `.vscode/mcp.json` no seu workspace:
     "pmz-dayz-mcp": {
       "type": "stdio",
       "command": "node",
-      "args": ["D:\\Versoes_Dayz\\PMZ DayZ MCP\\pmz-dayz-mcp\\index.js"],
+      "args": ["C:\\MeuCaminho\\PMZ_DayZ_MCP\\pmz-dayz-mcp\\index.js"],
       "env": {
-        "DAYZ_128_PATH": "D:\\Versoes_Dayz\\PMZ DayZ MCP\\1.28",
-        "DAYZ_129_PATH": "D:\\Versoes_Dayz\\PMZ DayZ MCP\\1.29"
+        "DAYZ_128_PATH": "C:\\MeuCaminho\\PMZ_DayZ_MCP\\1.28",
+        "DAYZ_129_PATH": "C:\\MeuCaminho\\PMZ_DayZ_MCP\\1.29"
       }
     }
   }
 }
 ```
 
-> ⚠️ **Ajuste os caminhos** para refletir onde estão os seus arquivos!
+> ⚠️ **Importante:** Os 3 caminhos (`args`, `DAYZ_128_PATH` e `DAYZ_129_PATH`) devem apontar para onde você clonou o repositório!
 
 ### 5. Iniciar o servidor
 
