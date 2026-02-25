@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --version)",
+      "Bash(timeout 5 node index.js)",
+      "Bash(python3 -c \":*)",
+      "Bash(node -e \":*)",
+      "Bash(node \"D:/Versoes_Dayz/PMZ DayZ MCP/pmz-dayz-mcp/fix_mcp.js\")"
+    ]
+  }
+}

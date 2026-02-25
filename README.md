@@ -241,6 +241,67 @@ O servidor vem com conhecimento inicial pré-carregado:
 
 ---
 
+## 🔄 Atualizando as Pastas de Versões do DayZ
+
+As pastas `1.28/` e `1.29/` contêm o código-fonte (EnScript) extraído de cada versão do DayZ.
+
+### Onde conseguir os scripts
+
+Os scripts ficam dentro da instalação do DayZ no Steam:
+```
+Steam\steamapps\common\DayZ\dta\scripts.pbo
+```
+Use o **PBO Manager** ou **DayZ Tools** para extrair o conteúdo do `scripts.pbo`.
+
+### Atualizar uma versão existente
+
+1. Extraia o novo `scripts.pbo` da versão atualizada do DayZ
+2. Substitua o conteúdo da pasta correspondente (ex: `1.29/scripts/`)
+3. Se houver novos layouts GUI, atualize também `1.29/gui/`
+4. No Claude, peça para reconstruir o índice:
+   > *"Reconstrua o índice do MCP"* — isso executa a tool `rebuild_index`
+
+### Adicionar uma nova versão (ex: 1.30)
+
+1. Crie a pasta na raiz do projeto:
+```bash
+mkdir -p 1.30/scripts 1.30/gui
+```
+
+2. Extraia os scripts e layouts do DayZ 1.30 para dentro dessa pasta
+
+3. Atualize os caminhos — adicione a nova variável de ambiente nos arquivos de configuração MCP:
+
+**No `.mcp.json` (raiz do projeto):**
+```json
+{
+  "mcpServers": {
+    "pmz-dayz-mcp": {
+      "env": {
+        "DAYZ_128_PATH": "D:\\caminho\\1.28",
+        "DAYZ_129_PATH": "D:\\caminho\\1.29",
+        "DAYZ_130_PATH": "D:\\caminho\\1.30"
+      }
+    }
+  }
+}
+```
+
+**No `src/config.js`:**
+```js
+dayz130Path: process.env.DAYZ_130_PATH || 'D:\\Versoes_Dayz\\PMZ DayZ MCP\\1.30',
+```
+
+4. Atualize o `ScriptIndexer.js` e `index.js` para indexar a nova versão
+
+5. Reinicie o servidor MCP (recarregue o VSCode: `Ctrl+Shift+P` > "Reload Window")
+
+6. Use `rebuild_index` para indexar a nova versão
+
+> **Dica:** Se configurou o MCP globalmente, lembre-se de atualizar também o `~/.claude/settings.json` e o `User Settings` do VSCode.
+
+---
+
 ## ⚙️ Detalhes Técnicos
 
 | Detalhe | Valor |
