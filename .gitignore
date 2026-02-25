@@ -1,0 +1,6 @@
+node_modules/
+.cache/
+*.log
+.env
+1.28/
+1.29/
