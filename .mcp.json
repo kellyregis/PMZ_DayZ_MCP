@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "pmz-dayz-mcp": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["D:\\Versoes_Dayz\\PMZ DayZ MCP\\pmz-dayz-mcp\\index.js"],
+      "env": {
+        "DAYZ_128_PATH": "D:\\Versoes_Dayz\\PMZ DayZ MCP\\1.28",
+        "DAYZ_129_PATH": "D:\\Versoes_Dayz\\PMZ DayZ MCP\\1.29"
+      }
+    }
+  }
+}
