@@ -4,13 +4,19 @@
   "description": "PMZ DayZ MCP Server - Knowledge Base e Índice de Scripts 1.28/1.29",
   "type": "module",
   "main": "index.js",
+  "bin": {
+    "pmz-dayz-mcp": "src/ingest/cli.js"
+  },
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "index": "node index.js --rebuild-index"
+    "index": "node src/ingest/cli.js index",
+    "test:parser": "node test/parser.smoke.mjs"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.0.0"
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "better-sqlite3": "^11.10.0",
+    "zod": "^3.25.76"
   },
   "engines": {
     "node": ">=18.0.0"

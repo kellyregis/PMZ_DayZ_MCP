@@ -1,36 +1,27 @@
-// src/config.js
-// Configuração central do MCP — ajuste os caminhos aqui se necessário
-
+// src/config.js — configuração central do MCP (caminhos e nomes).
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT = path.join(__dirname, '..');
 
 export const config = {
-  // Caminhos dos Scripts DayZ no seu PC
-  // Pode sobrescrever com variáveis de ambiente:
-  //   set DAYZ_128_PATH=D:\outro\caminho
-  dayz128Path: process.env.DAYZ_128_PATH || 'D:\\Versoes_Dayz\\PMZ DayZ MCP\\1.28',
-  dayz129Path: process.env.DAYZ_129_PATH || 'D:\\Versoes_Dayz\\PMZ DayZ MCP\\1.29',
+  serverName: 'pmz-dayz-mcp',
+  serverVersion: '2.0.0',
 
-  // Subpastas a indexar dentro de cada versão
-  scriptFolders: ['Scripts'],
-  guiFolders:    ['GUI'],
+  // Caminho do índice SQLite. Sobrescreva com PMZ_DAYZ_DB.
+  dbPath: process.env.PMZ_DAYZ_DB || path.join(ROOT, 'data', 'dayz.db'),
 
-  // Pastas dentro de Scripts a indexar
-  scriptLayers: ['1_Core', '2_GameLib', '3_Game', '4_World', '5_Mission'],
+  // Raízes das versões do jogo (contêm scripts/ e opcionalmente bin/config.cpp).
+  paths: {
+    '1.30': process.env.DAYZ_130_PATH || '/mnt/d/Mods/PMZ DayZ MCP/Cliente_130/dta/scripts',
+    '1.29': process.env.DAYZ_129_PATH || '/mnt/d/Mods/PMZ DayZ MCP/1.29_latest',
+    '1.29_old': process.env.DAYZ_129_OLD_PATH || '/mnt/d/Mods/PMZ DayZ MCP/1.29_fix',
+    '1.28': process.env.DAYZ_128_PATH || '/mnt/d/Mods/PMZ DayZ MCP/1.28',
+  },
 
-  // Onde ficam os arquivos da knowledge base
-  knowledgeBasePath: path.join(__dirname, '..', 'src', 'knowledge-base'),
-
-  // Onde o índice em cache fica salvo (evita reindexar a cada start)
-  cachePath: path.join(__dirname, '..', '.cache'),
-
-  // Extensões de arquivo a indexar
-  scriptExtensions: ['.c'],
-  guiExtensions:    ['.layout', '.xml'],
-
-  // Servidor MCP
-  serverName:    'pmz-dayz-mcp',
-  serverVersion: '1.0.0',
+  // Versão default respondida quando a tool não especifica.
+  defaultVersion: process.env.PMZ_DAYZ_DEFAULT_VERSION || '1.29',
 };
+
+export default config;
